@@ -1159,7 +1159,7 @@ terminate(_Reason, Ctx=#co_ctx {name = _Name}) ->
 		      lager:debug("~s: terminate: Killing app with pid = ~p", 
 			   [_Name, Pid]),
 			  %% Or gen_server:cast(Pid, co_node_terminated) ?? 
-		      exit(Pid, co_node_terminated)
+		      exit(Pid, normal)
 	      end
       end,
       Ctx#co_ctx.app_list),
@@ -1172,7 +1172,7 @@ terminate(_Reason, Ctx=#co_ctx {name = _Name}) ->
 		      lager:debug("~s: terminate: Killing TPDO with pid = ~p", 
 			   [_Name, Pid]),
 			  %% Or gen_server:cast(Pid, co_node_terminated) ?? 
-		      exit(Pid, co_node_terminated)
+		      exit(Pid, normal)
 	      end
       end,
       Ctx#co_ctx.tpdo_list),
