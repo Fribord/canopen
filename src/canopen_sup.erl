@@ -30,8 +30,7 @@
 -include("canopen.hrl").
 
 %% API
--export([start_link/1, 
-	 stop/0]).
+-export([start_link/1]).
 
 %% Supervisor callbacks
 -export([init/1]).
@@ -41,11 +40,10 @@
 %% ===================================================================
 
 %%--------------------------------------------------------------------
-%% @spec start_link(Args) -> {ok, Pid} | ignore | {error, Error}
+%% @spec start_link(Serial) -> {ok, Pid} | ignore | {error, Error}
 %% @doc
 %% Starts the supervisor.
 %%
-%%   Args = [{serial, Serial}, {options, Options}]
 %% @end
 %%--------------------------------------------------------------------
 start_link(Serial) ->
@@ -62,17 +60,6 @@ start_link(Serial) ->
 	    Reason
 
     end.
-
-%%--------------------------------------------------------------------
-%% @spec stop() -> ok
-%% @doc
-%% Stops the supervisor.
-%%
-%% @end
-%%--------------------------------------------------------------------
-stop() ->
-    exit(normal).
-
 
 %% ===================================================================
 %% Supervisor callbacks
@@ -117,6 +104,6 @@ init([Serial]) ->
 	     end,
     Processes = [CoProc, CoNode, SysApp] ++ OsApps,
     lager:debug("about to start ~p", [Processes]),
-    {ok, { {rest_for_one, 0, 300}, Processes} }.
+    {ok, { {one_for_all, 0, 300}, Processes} }.
 
 

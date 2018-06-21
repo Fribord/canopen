@@ -1120,7 +1120,7 @@ handle_info({'EXIT', Pid, Reason}, Ctx=#co_ctx {name = _Name}) ->
 
     case Ctx3 of
 	Ctx ->
-	    %% No 'normal' linked process died, we should termiate ??
+	    %% No 'normal' linked process died, we should terminate ??
 	    %% co_nmt ??
 	    lager:debug("~s: handle_info: linked process ~p died, reason ~p, "
 		 "terminating\n", [_Name, Pid, Reason]),
@@ -1144,6 +1144,7 @@ handle_info(_Info, Ctx=#co_ctx {name = _Name}) ->
 %% @end
 %%--------------------------------------------------------------------
 terminate(_Reason, Ctx=#co_ctx {name = _Name}) ->
+    lager:debug("~s: terminate: reason ~p.", [_Name, _Reason]),
     %% If NMT master stop master process
     if Ctx#co_ctx.nmt_role == master ->
 	    deactivate_nmt(Ctx);
@@ -1181,7 +1182,7 @@ terminate(_Reason, Ctx=#co_ctx {name = _Name}) ->
 	true -> co_proc:clear();
 	false -> do_nothing
     end,
-   lager:debug("~s: terminate: cleaned up, exiting", [_Name]),
+    lager:debug("~s: terminate: cleaned up, exiting", [_Name]),
     ok.
 
 %%--------------------------------------------------------------------
@@ -2032,6 +2033,8 @@ handle_sdo_process(S, Reason, Ctx=#co_ctx {name = _Name, sdo_list = SList}) ->
 
 maybe_warning(normal, _Type, _Name) ->
     ok;
+maybe_warning(shutdown, _Type, _Name) ->
+    ok;
 maybe_warning(Reason, Type, Name) ->
     ?ee("~s: ~s died: ~p", [Name, Type, Reason]).
 
@@ -2050,7 +2053,7 @@ handle_app_processes(Ref, Reason, Ctx=#co_ctx {app_list = AList}) ->
 handle_app_process(A=#app {pid = Pid}, Reason, 
 		   Ctx=#co_ctx {name = _Name, app_list = AList,
 			       sub_table = STable, res_table = RTable}) ->
-    if Reason =/= normal ->
+    if Reason =/= normal andalso Reason =/= shutdown ->
 	    ?ee("~s: id=~w application died:~p", [_Name,A#app.pid, Reason]);
        true -> ok
     end,
