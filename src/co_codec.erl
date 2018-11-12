@@ -312,14 +312,11 @@ decode_e(Data, Type, S) when is_atom(Type) ->
     decode_e(Data, co_lib:encode_type(Type), S).
 
 decode_compound_e(Data,[TS = {_T,_S}|TSs]) -> %% {Type, Size}
-    io:format("decode_compound_e: data ~w, ts ~p, tss ~p\n", [Data, TS, TSs]), 
+    %% io:format("decode_compound_e: data ~w, ts ~p, tss ~p\n", [Data, TS, TSs]), 
     Sz = bitsize_e(TS),
     {DataT,DataTs} = split_bits(Data,Sz),
-    io:format("decode_compound_e: dataT ~w, dataTS ~w, sz ~p\n", 
-	      [DataT, DataTs, Sz]), 
     {D,<<>>} = decode(DataT,TS),
     {Ds,Data1} = decode_compound_e(DataTs,TSs),
-    io:format("decode_compound_e: d ~p, ds ~p, data1 ~w\n",  [D, Ds, Data1]), 
     {[D|Ds], Data1};
 decode_compound_e(Data,[S|Ss]) ->%% Size
     %% io:format("decode_compound_e: data ~w, s ~p, ss ~p\n", [Data, S, Ss]), 
@@ -357,15 +354,9 @@ split_bits(Bits, Sz) when is_bitstring(Bits), Sz =< bit_size(Bits) ->
 	    Al = Sz bsr 3,  %% number of bytes
 	    Bk = 8 - Ak,    %% head bits of B
 	    Bn = N - Sz,    %% All B bits
-	    if Al =:= 0 andalso Bn >= Bk ->
-		    <<A:Sz/bits,B1:Bk/bits,B2/bits>> = Bits,
-		    {<<A/bits>>, <<B1/bits,B2/bits>>};
-	       Al =:= 0 andalso Bn < Bk ->
-		    <<A:Sz/bits,B/bits>> = Bits,
-		    {<<A/bits>>, <<B/bits>>};
-	       Al =/= 0 andalso Bn < Bk ->
+	    if Bn < Bk ->
 		    <<A1:Al/binary,B:Bn/bits,A2:Ak/bits>> = Bits,
-		    {<<A1/bits,A2/bits>>, B};	       
+		    {<<A1/bits,A2/bits>>, B};
 	       true ->
 		    <<A1:Al/binary,B1:Bk/bits,A2:Ak/bits,B2/bits>> = Bits,
 		    {<<A1/bits,A2/bits>>, <<B1/bits,B2/bits>>}
