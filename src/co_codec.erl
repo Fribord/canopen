@@ -357,6 +357,9 @@ split_bits(Bits, Sz) when is_bitstring(Bits), Sz =< bit_size(Bits) ->
 	    if Bn < Bk ->
 		    <<A1:Al/binary,B:Bn/bits,A2:Ak/bits>> = Bits,
 		    {<<A1/bits,A2/bits>>, B};
+	       Al =:= 0 ->
+		    <<A:Sz/bits, B/bits>> = Bits,
+		    {A,B};
 	       true ->
 		    <<A1:Al/binary,B1:Bk/bits,A2:Ak/bits,B2/bits>> = Bits,
 		    {<<A1/bits,A2/bits>>, <<B1/bits,B2/bits>>}
