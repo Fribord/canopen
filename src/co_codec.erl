@@ -354,10 +354,7 @@ split_bits(Bits, Sz) when is_bitstring(Bits), Sz =< bit_size(Bits) ->
 	    Al = Sz bsr 3,  %% number of bytes
 	    Bk = 8 - Ak,    %% head bits of B
 	    Bn = N - Sz,    %% All B bits
-	    if Al =:= 0 ->
-		    <<A:Sz/bits, B/bits>> = Bits,
-		    {A,B};
-	        Bn < Bk ->
+	    if Bn < Bk ->
 		    <<A1:Al/binary,B:Bn/bits,A2:Ak/bits>> = Bits,
 		    {<<A1/bits,A2/bits>>, B};
 	       true ->
