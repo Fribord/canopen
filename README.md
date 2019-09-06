@@ -16,10 +16,10 @@ canopen is built using rebar that can be found [here](https://github.com/rebar/r
 
 canopen also requires the following applications to be installed:
 <ul>
-<li>dthread - https://github.com/tonyrog/dthread</li>
-<li>uart - https://github.com/tonyrog/uart</li>
-<li>can - https://github.com/tonyrog/can</li>
-<li>lager - https://github.com/basho/lager</li>
+<li>dthread - https://github.com/HocYachts/dthread</li>
+<li>uart - https://github.com/HocYachts/uart</li>
+<li>can - https://github.com/HocYachts/can</li>
+<li>lager - https://github.com/HocYachts/lager</li>
 </ul>
 
 
@@ -28,18 +28,18 @@ canopen also requires the following applications to be installed:
 Clone the repository in a suitable location:
 
 ```sh
-$ git clone git://github.com/tonyrog/canopen.git
+$ git clone git://github.com/HocYachts/canopen.git
 ```
 ### Configurating
 #### Concepts
 
 canopen can be started with a number of options.<br/>
-For details either check [co_api.erl - start_link()](https://github.com/tonyrog/canopen/raw/master/src/co_api.erl) or in the full implementation documentation, see below on how to create it.
+For details either check [co_api.erl - start_link()](https://github.com/HocYachts/canopen/raw/master/src/co_api.erl) or in the full implementation documentation, see below on how to create it.
 
 #### Files
 
 Arguments to all applicable erlang applications are specified in an erlang configuration file.<br/>
-An example can be found in ["sys.config"](https://github.com/tonyrog/canopen/raw/master/sys.config).<br/>
+An example can be found in ["sys.config"](https://github.com/HocYachts/canopen/raw/master/sys.config).<br/>
 
 
 ### Building
